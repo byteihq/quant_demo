@@ -1,3 +1,60 @@
+## Tree
+```
+.
+└── sources
+    ├── CMakeLists.txt
+    ├── common
+    │   ├── event
+    │   │   ├── normalized_event.cpp
+    │   │   └── normalized_event.hpp
+    │   └── exchange
+    │       └── exchange_params.hpp
+    ├── conanfile.txt
+    ├── core
+    │   ├── algorithm
+    │   │   ├── ac.cpp
+    │   │   ├── ac.hpp
+    │   │   ├── sor.cpp
+    │   │   ├── sor.hpp
+    │   │   ├── vwap.cpp
+    │   │   └── vwap.hpp
+    │   ├── error_handling
+    │   │   ├── error_handling.cpp
+    │   │   └── error_handling.hpp
+    │   ├── interface
+    │   │   ├── connector.hpp
+    │   │   ├── handler.hpp
+    │   │   ├── notifier.hpp
+    │   │   ├── serializer.hpp
+    │   │   └── session.hpp
+    │   └── log
+    │       ├── log.cpp
+    │       └── log.hpp
+    ├── Dockerfile
+    ├── engine
+    │   ├── pipeline.cpp
+    │   └── pipeline.hpp
+    ├── exchange
+    │   └── binance
+    │       ├── connector.cpp
+    │       ├── connector.hpp
+    │       ├── handler.cpp
+    │       ├── handler.hpp
+    │       ├── info.hpp
+    │       ├── notifier.hpp
+    │       ├── serializer.cpp
+    │       └── serializer.hpp
+    ├── main.cpp
+    └── network
+        └── websockets
+            ├── session.cpp
+            ├── session.hpp
+            ├── websocket.cpp
+            └── websocket.hpp
+
+14 directories, 36 files
+```
+
 ## Toolchain
 - C++20
 - Cmake
