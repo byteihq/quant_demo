@@ -14,40 +14,41 @@ Handler::Handler(boost::asio::io_context& ioc)
       m_sor(params.lambda, params.targetAmount),
       m_sorLastUpdate(std::chrono::steady_clock::now()) {}
 
+void Handler::AddTarget(EventType evt, std::string_view target) {
+    serializer_t serializer;
+    notifier_t notifier;
+    const auto idx = m_parsers.size();
+
+    switch (target.second) {
+        case EventType::Depth:
+            serializer = std::make_unique<DepthSerializer>();
+            break;
+        case EventType::Trade:
+            serializer = std::make_unique<TradeSerializer>();
+            break;
+        default:
+            assert(0 && "Unexpected event type");
+            break;
+    }
+
+    notifier = std::make_unique<BaseNotifier>();
+    notifier->OnConnectionSeccessed = std::bind(&Handler::OnConnectionSeccessed, this, idx);
+    notifier->OnConnectionFailed = std::bind(&Handler::OnConnectionFailed, this, idx, _1);
+    notifier->OnReceiveSuccessed = std::bind(&Handler::OnReceiveSuccessed, this, idx, _1);
+    notifier->OnReceiveFailed = std::bind(&Handler::OnReceiveFailed, this, idx, _1);
+    notifier->OnStopRequested = std::bind(&Handler::OnStopRequsted, this, idx);
+    notifier->OnStop = std::bind(&Handler::OnStop, this, idx);
+
+    m_parsers.emplace_back(target, std::move(notifier), std::move(serializer), 0);
+}
+
 void Handler::Init() {
     using namespace std::placeholders;
 
-    for (const auto& target : targets) {
-        serializer_t serializer;
-        notifier_t notifier;
-        const auto idx = m_parsers.size();
+    for (const auto& parser : m_parsers) {
+        LOG(info, "Created parser for target: {}", parser.target);
 
-        switch (target.second) {
-            case EventType::Depth:
-                serializer = std::make_unique<DepthSerializer>();
-                break;
-            case EventType::Trade:
-                serializer = std::make_unique<TradeSerializer>();
-                break;
-            default:
-                assert(0 && "Unexpected event type");
-                break;
-        }
-
-        notifier = std::make_unique<BaseNotifier>();
-        notifier->OnConnectionSeccessed = std::bind(&Handler::OnConnectionSeccessed, this, idx);
-        notifier->OnConnectionFailed = std::bind(&Handler::OnConnectionFailed, this, idx, _1);
-        notifier->OnReceiveSuccessed = std::bind(&Handler::OnReceiveSuccessed, this, idx, _1);
-        notifier->OnReceiveFailed = std::bind(&Handler::OnReceiveFailed, this, idx, _1);
-        notifier->OnStopRequested = std::bind(&Handler::OnStopRequsted, this, idx);
-        notifier->OnStop = std::bind(&Handler::OnStop, this, idx);
-
-        m_parsers.emplace_back(std::move(notifier), std::move(serializer), 0);
-
-        LOG(info, "Created parser for target: {} - {}. Id: {}", target.first,
-            magic_enum::enum_name(target.second), idx);
-
-        m_connector.Subscribe(target.first, m_parsers.back().notifier.get());
+        m_connector.Subscribe(parser.target, parser.notifier.get());
     }
 }
 

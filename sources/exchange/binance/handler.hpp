@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "connector.hpp"
+#include "info.hpp"
 #include "notifier.hpp"
 #include "serializer.hpp"
 
@@ -20,7 +21,7 @@ namespace exchange::binance {
 class Handler final : public core::interface::IHandler {
 public:
     Handler(boost::asio::io_context& ioc);
-
+    void AddTarget(EventType evt, std::string_view target);
     void Init() override;
 
 private:
@@ -44,6 +45,7 @@ private:
     using serializer_t = std::unique_ptr<core::interface::ISerializer>;
 
     struct Parser {
+        std::string_view target;
         notifier_t notifier;
         serializer_t serializer;
         uint16_t errors;  // simple statistic

@@ -9,8 +9,15 @@ int main() {
 
         boost::asio::io_context ioc;
 
+        auto depthHandler = std::make_unique<exchange::binance::Handler>(ioc);
+        depthHandler->AddTarget(EventType::Depth, "/ws/ethusdt@depth20@100ms");
+
+        auto tradeHandler = std::make_unique<exchange::binance::Handler>(ioc);
+        tradeHandler->AddTarget(EventType::Trade, "/ws/ethusdt@trade@50ms");
+
         engine::Pipeline pipeline;
-        pipeline.AddHandler(std::make_unique<exchange::binance::Handler>(ioc));
+        pipeline.AddHandler(depthHandler);
+        pipeline.AddHandler(tradeHandler);
 
         pipeline.Init();
 
