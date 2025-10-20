@@ -17,9 +17,11 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/conan_toolchain.cmake)
 
 project(market_demo LANGUAGES CXX)
 
-add_library(${PROJECT_NAME}-test INTERFACE)
+add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
-target_include_directories(${PROJECT_NAME}-test INTERFACE
+add_library(${PROJECT_NAME}-interface INTERFACE)
+
+target_include_directories(${PROJECT_NAME}-interface INTERFACE
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core/interfaces>"
         "$<INSTALL_INTERFACE:include>"
         )

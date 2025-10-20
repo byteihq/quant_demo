@@ -11,15 +11,17 @@ namespace ceh = core::error_handling;
 
 Handler::Handler(boost::asio::io_context& ioc)
     : m_connector(ioc),
-      m_sor(params.lambda, params.targetAmount),
-      m_sorLastUpdate(std::chrono::steady_clock::now()) {}
+      m_sorLastUpdate(std::chrono::steady_clock::now()),
+      m_sor(params.lambda, params.targetAmount) {}
 
 void Handler::AddTarget(EventType evt, std::string_view target) {
+    using namespace std::placeholders;
+
     serializer_t serializer;
     notifier_t notifier;
     const auto idx = m_parsers.size();
 
-    switch (target.second) {
+    switch (evt) {
         case EventType::Depth:
             serializer = std::make_unique<DepthSerializer>();
             break;
