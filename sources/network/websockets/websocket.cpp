@@ -43,7 +43,7 @@ void Websocket::OnResolve(beast::error_code ec, tcp::resolver::results_type resu
         results, beast::bind_front_handler(&Websocket::OnConnect, shared_from_this()));
 }
 
-void Websocket::OnConnect(beast::error_code ec, tcp::resolver::results_type::endpoint_type ep) {
+void Websocket::OnConnect(beast::error_code ec, tcp::resolver::results_type::endpoint_type) {
     if (ec) {
         LOG(err, "Failed to connect to target {}/{}. Ec: {} -> {}", m_host, m_target, ec.value(),
             ec.message());
@@ -91,13 +91,13 @@ void Websocket::OnHandshake(beast::error_code ec) {
     m_ws.async_read(m_buffer, beast::bind_front_handler(&Websocket::OnRead, shared_from_this()));
 }
 
-void Websocket::OnRead(beast::error_code ec, std::size_t bytes_transferred) {
+void Websocket::OnRead(beast::error_code ec, std::size_t) {
     if (m_notifier->OnStopRequested()) {
         m_notifier->OnStop();
         return;
     }
 
-    if (ec) {
+    if (ec) [[unlikely]] {
         LOG(err, "Failed to read msg. Ec: {} -> {}", ec.value(), ec.message());
         m_notifier->OnReceiveFailed(ceh::ErrorCode::eReadFailed);
         m_buffer.clear();
@@ -106,7 +106,7 @@ void Websocket::OnRead(beast::error_code ec, std::size_t bytes_transferred) {
         return;
     }
 
-    if (m_buffer.size() > maxMsgSize) {
+    if (m_buffer.size() > maxMsgSize) [[unlikely]] {
         LOG(err, "Msg size is too big. Max expected size: {}, got: {}", maxMsgSize,
             m_buffer.size());
         m_notifier->OnReceiveFailed(ceh::ErrorCode::eMsgTooBig);

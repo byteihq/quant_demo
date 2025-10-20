@@ -86,7 +86,7 @@ void DepthSerializer::Serialize(std::span<std::byte> buffer, OnSuccess OnSuccess
         }
 
         uint16_t lvl = 0;
-        for (auto b : obj["bids"].get_array().value()) {
+        for (auto bids = obj["bids"].get_array().value(); auto&& b : bids) {
             auto row = b.get_array().value();
             auto it = row.begin();
 
@@ -108,7 +108,7 @@ void DepthSerializer::Serialize(std::span<std::byte> buffer, OnSuccess OnSuccess
         }
 
         lvl = 0;
-        for (auto a : obj["asks"].get_array().value()) {
+        for (auto asks = obj["asks"].get_array().value(); auto&& a : asks) {
             auto row = a.get_array().value();
             auto it = row.begin();
 

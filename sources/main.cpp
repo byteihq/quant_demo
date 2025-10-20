@@ -1,6 +1,7 @@
 #include <core/log/log.hpp>
 #include <engine/pipeline.hpp>
 #include <exchange/binance/handler.hpp>
+#include <exchange/binance/info.hpp>
 #include <iostream>
 
 int main() {
@@ -9,8 +10,15 @@ int main() {
 
         boost::asio::io_context ioc;
 
+        auto depthHandler = std::make_unique<exchange::binance::Handler>(ioc);
+        depthHandler->AddTarget(exchange::binance::EventType::Depth, "/ws/ethusdt@depth20@100ms");
+
+        auto tradeHandler = std::make_unique<exchange::binance::Handler>(ioc);
+        tradeHandler->AddTarget(exchange::binance::EventType::Trade, "/ws/ethusdt@trade@50ms");
+
         engine::Pipeline pipeline;
-        pipeline.AddHandler(std::make_unique<exchange::binance::Handler>(ioc));
+        pipeline.AddHandler(std::move(depthHandler));
+        pipeline.AddHandler(std::move(tradeHandler));
 
         pipeline.Init();
 
