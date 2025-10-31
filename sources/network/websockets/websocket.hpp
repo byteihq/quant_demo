@@ -57,7 +57,6 @@ public:
     inline void Close() noexcept {
         beast::error_code ec;
         m_ws.close(boost::beast::websocket::close_code::normal, ec);
-        std::ignore = ec;
     }
 
 private:
