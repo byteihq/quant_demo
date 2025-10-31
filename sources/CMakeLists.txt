@@ -22,7 +22,7 @@ add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 add_library(${PROJECT_NAME}-interface INTERFACE)
 
 target_include_directories(${PROJECT_NAME}-interface INTERFACE
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core/interfaces>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core/interface>"
         "$<INSTALL_INTERFACE:include>"
         )
 

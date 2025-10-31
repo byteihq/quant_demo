@@ -13,6 +13,8 @@ public:
         m_ws->Run(source, target, port);
     }
 
+    inline void Close() noexcept { m_ws->Close(); }
+
 private:
     std::shared_ptr<Websocket> m_ws;
 };
@@ -24,5 +26,7 @@ void Session::Connect(std::string_view source, std::string_view target, uint16_t
     m_impl->Connect(source, target, port, notifier);
 }
 
-Session::~Session() {}
+Session::~Session() {
+    m_impl->Close();
+}
 }  // namespace network::websockets

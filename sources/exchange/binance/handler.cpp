@@ -34,7 +34,7 @@ void Handler::AddTarget(EventType evt, std::string_view target) {
     }
 
     notifier = std::make_unique<BaseNotifier>();
-    notifier->OnConnectionSeccessed = std::bind(&Handler::OnConnectionSeccessed, this, idx);
+    notifier->OnConnectionSuccessed = std::bind(&Handler::OnConnectionSuccessed, this, idx);
     notifier->OnConnectionFailed = std::bind(&Handler::OnConnectionFailed, this, idx, _1);
     notifier->OnReceiveSuccessed = std::bind(&Handler::OnReceiveSuccessed, this, idx, _1);
     notifier->OnReceiveFailed = std::bind(&Handler::OnReceiveFailed, this, idx, _1);
@@ -54,7 +54,7 @@ void Handler::Init() {
     }
 }
 
-void Handler::OnConnectionSeccessed(size_t idx) {
+void Handler::OnConnectionSuccessed(size_t idx) {
     LOG(info, "[{}] successfully connected", idx);
 }
 

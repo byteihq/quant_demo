@@ -56,7 +56,7 @@ private:
      *
      * @param idx Index of the parser/connection.
      */
-    void OnConnectionSeccessed(size_t idx);
+    void OnConnectionSuccessed(size_t idx);
 
     /**
      * @brief Callback invoked when a connection fails.

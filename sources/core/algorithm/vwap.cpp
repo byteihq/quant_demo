@@ -18,7 +18,7 @@ std::vector<VWAP::Result> VWAP::Compute(float takerFee) {
 
     LOG(trace, "asks count: {}, bids count: {}", m_asks.size(), m_bids.size());
 
-    std::ranges::sort(m_asks, [](event_t& lhs, event_t& rhs) { return lhs.price > rhs.price; });
+    std::ranges::sort(m_asks, [](event_t& lhs, event_t& rhs) { return lhs.price < rhs.price; });
     std::ranges::sort(m_bids, [](event_t& lhs, event_t& rhs) { return lhs.price > rhs.price; });
 
     float bestBid = m_bids.front().price;

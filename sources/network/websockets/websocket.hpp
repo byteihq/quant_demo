@@ -54,6 +54,12 @@ public:
         m_notifier = notifier;
     }
 
+    inline void Close() noexcept {
+        beast::error_code ec;
+        m_ws.close(boost::beast::websocket::close_code::normal, ec);
+        std::ignore = ec;
+    }
+
 private:
     /**
      * @brief Callback invoked after DNS resolution.

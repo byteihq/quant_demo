@@ -18,7 +18,7 @@ public:
     /**
      * @brief Called when a connection is successfully established.
      */
-    std::function<void()> OnConnectionSeccessed;
+    std::function<void()> OnConnectionSuccessed;
 
     /**
      * @brief Called when a connection attempt fails.

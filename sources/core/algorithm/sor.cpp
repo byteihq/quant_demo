@@ -31,7 +31,7 @@ void SOR::Compute(std::vector<VenueData>& venues) const {
 
     for (size_t i = 0; i < N; i++) {
         float vol = w(i) * m_targetAmount;
-        LOG(info, "Order result: volume={}, E[cost]={}, Var(cost)={}", venues[i].name, vol,
+        LOG(info, "Order result: name={}, volume={}, E[cost]={}, Var(cost)={}", venues[i].name, vol,
             expected_cost(i), var_cost(i));
     }
 }

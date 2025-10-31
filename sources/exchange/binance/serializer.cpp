@@ -129,9 +129,10 @@ void DepthSerializer::Serialize(std::span<std::byte> buffer, OnSuccess OnSuccess
             events.push_back(e);
         }
 
-        OnSuccessed(events);
         ++m_lastUpdateId;
     }
+
+    OnSuccessed(events);
 }
 
 void TradeSerializer::Serialize(std::span<std::byte> buffer, OnSuccess OnSuccessed,
@@ -172,8 +173,8 @@ void TradeSerializer::Serialize(std::span<std::byte> buffer, OnSuccess OnSuccess
         e.price = price;
         e.size = size;
         events.push_back(e);
-
-        OnSuccessed(events);
     }
+
+    OnSuccessed(events);
 }
 }  // namespace exchange::binance
